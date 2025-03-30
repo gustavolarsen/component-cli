@@ -1,0 +1,11 @@
+{
+  "name": "component-cli",
+  "version": "1.0.0",
+  "description": "CLI para criar componentes React rapidamente",
+  "main": "generateComponent.js",
+  "bin": {
+    "component-cli": "./generateComponent.js"
+  },
+  "dependencies": {},
+  "type": "module"
+}
