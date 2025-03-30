@@ -2,16 +2,15 @@
 
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+// Obtém o diretório onde o comando foi executado
+const projectRoot = process.cwd();
 
 // Obtém argumentos da linha de comando
 const args = process.argv;
 if (args.length < 3) {
   console.error(
-    "Por favor, forneça o nome do componente. Exemplo: node generateComponent.js MeuComponente"
+    "Por favor, forneça o nome do componente. Exemplo: component-cli MeuComponente"
   );
   process.exit(1);
 }
@@ -19,19 +18,19 @@ if (args.length < 3) {
 const componentName = args[2];
 const className = componentName.toLowerCase();
 
-// Caminhos das pastas
-const componentsDir = path.join(__dirname, "src/components");
+// Caminhos das pastas dentro do projeto do usuário
+const componentsDir = path.join(projectRoot, "src/components");
 const componentDir = path.join(componentsDir, componentName);
 const componentFile = path.join(componentDir, `${componentName}.jsx`);
 const styleFile = path.join(componentDir, `${componentName}.module.css`);
 
 try {
-  // Garante que a pasta components existe
+  // Garante que a pasta components existe no projeto do usuário
   if (!fs.existsSync(componentsDir)) {
-    fs.mkdirSync(componentsDir);
+    fs.mkdirSync(componentsDir, { recursive: true });
   }
 
-  // Garante que a pasta do componente existe
+  // Garante que a pasta do componente não exista antes de criá-la
   if (fs.existsSync(componentDir)) {
     console.error("A pasta do componente já existe!");
     process.exit(1);
@@ -62,11 +61,13 @@ export default ${componentName};
 }
 `;
 
-  // Cria os arquivos
+  // Cria os arquivos no projeto do usuário
   fs.writeFileSync(componentFile, componentTemplate.trim(), "utf8");
   fs.writeFileSync(styleFile, styleTemplate.trim(), "utf8");
 
-  console.log(`✅ Componente "${componentName}" criado com sucesso!`);
+  console.log(
+    `✅ Componente "${componentName}" criado com sucesso em ${componentDir}`
+  );
   process.exit(0);
 } catch (error) {
   console.error("❌ Erro ao criar o componente:", error);
