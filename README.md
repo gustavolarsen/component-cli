@@ -23,6 +23,7 @@ Após a instalação, você pode usar a CLI em qualquer lugar em seus projetos R
 ```bash
 component-cli NomeDoComponente
 ```
+| Recomendo a rodar no console do `Git Bash`, no PowerShell poder dar erro de permissão.
 
 Isso irá gerar:
 
